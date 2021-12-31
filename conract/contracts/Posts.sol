@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import "hardhat/console.sol";
-
 contract Posts {
-    uint256 totalPosts;
-    event NewPost(address indexed from, uint256 timestamp, string message);
+    uint256 public postsCount;
+    mapping(uint256 => Post) public posts;
+    event NewPost(uint256 id, address indexed from, uint256 timestamp, string message);
 
     struct Post {
+        uint256 id;
         address sender;
         string message;
         string title;
@@ -17,27 +17,17 @@ contract Posts {
         uint256 timestamp;
     }
 
-    Post[] posts;
-
     constructor() {
-        console.log("I AM ALIVE");
+        postsCount=0;
     }
 
     function post(string memory _message, string memory _title, string memory _img, string memory _desc) public {
-        totalPosts += 1;
-        console.log("%s has waved!", msg.sender);
-
-        posts.push(Post(msg.sender, _message, _title, _img, _desc, block.timestamp));
-
-        emit NewPost(msg.sender, block.timestamp, _message);
+        postsCount += 1;
+        posts[postsCount] = Post(postsCount,msg.sender, _message, _title, _img, _desc, block.timestamp);
+        emit NewPost(postsCount,msg.sender, block.timestamp, _message);
     }
 
-    function getAllPosts() public view returns (Post[] memory) {
-        return posts;
-    }
-
-    function getTotalPosts() public view returns (uint256) {
-        console.log("We have %d total posts!", totalPosts);
-        return totalPosts;
+    function getpostsCount() public view returns (uint256) {
+        return postsCount;
     }
 }
