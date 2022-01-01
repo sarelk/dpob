@@ -27,6 +27,7 @@ const App = () => {
          * Call the getAllPosts method from your Smart Contract
          */
         const waves = await PostsContract.getAllPosts();
+        console.log(waves[1])
         
 
         /*
